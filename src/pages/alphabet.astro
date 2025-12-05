@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<!-- <style>
+  /* small page layout helpers */
+  .page {
+    padding: 88px 20px 64px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .page-title {
+    margin: 6px 0 18px;
+    font-size: 1.6rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* placeholder cloud wrapper bounds */
+  .alphabet-cloud {
+    margin-top: 14px;
+  }
+
+  /* grid fallback — script may populate .alphabet-grid */
+  .alphabet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+    gap: 12px;
+    align-items: center;
+  }
+
+  .alphabet-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    border-radius: 10px;
+    background: var(--paper, #fff);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+  .alphabet-letter:active {
+    transform: translateY(1px);
+  }
+</style> -->
+<Layout title="Алфавит">
+  <header role="banner">
+    <a class="home" href="/" aria-label="Home — Ног ирон ӕвзаг">Ног ирон ӕвзаг</a>
+  </header>
+
+  <main class="page" role="main">
+    <h1 class="page-title">Алфавит</h1>
+
+    <section class="section-cloud alphabet-cloud" aria-labelledby="alphabet-intro">
+      <h2 id="alphabet-intro" class="visually-hidden">Алфавит</h2>
+
+      <!-- The shared script expects .alphabet-grid and .alphabet-letter.
+                     Script may populate this grid — keep the selector intact.
+                     You can seed letters here if you prefer; script will enhance/interact. -->
+      <div class="alphabet-grid" id="alphabet-grid" aria-live="polite" aria-label="Alphabet cloud">
+        <!-- Minimal seed (JS will add/replace as needed) -->
+        <div class="alphabet-letter" data-letter="А">А</div>
+        <div class="alphabet-letter" data-letter="Ӕ">Ӕ</div>
+        <div class="alphabet-letter" data-letter="Б">Б</div>
+        <div class="alphabet-letter" data-letter="Г">Г</div>
+        <div class="alphabet-letter" data-letter="Д">Д</div>
+        <div class="alphabet-letter" data-letter="З">З</div>
+        <div class="alphabet-letter" data-letter="И">И</div>
+        <div class="alphabet-letter" data-letter="К">К</div>
+        <div class="alphabet-letter" data-letter="Л">Л</div>
+        <div class="alphabet-letter" data-letter="М">М</div>
+        <div class="alphabet-letter" data-letter="Н">Н</div>
+        <div class="alphabet-letter" data-letter="О">О</div>
+        <div class="alphabet-letter" data-letter="П">П</div>
+        <div class="alphabet-letter" data-letter="Р">Р</div>
+        <div class="alphabet-letter" data-letter="С">С</div>
+        <div class="alphabet-letter" data-letter="Т">Т</div>
+        <div class="alphabet-letter" data-letter="У">У</div>
+        <div class="alphabet-letter" data-letter="Ф">Ф</div>
+        <div class="alphabet-letter" data-letter="Х">Х</div>
+        <div class="alphabet-letter" data-letter="Ц">Ц</div>
+        <div class="alphabet-letter" data-letter="Ч">Ч</div>
+        <div class="alphabet-letter" data-letter="Ш">Ш</div>
+      </div>
+
+      <p class="muted small" style="margin-top: 12px">
+        Нажмите букву — увидите слова и примеры. / Нӕ фындзы уыдон — фæлдтæ уӕд арфæ.
+      </p>
+    </section>
+  </main>
+
+  <script type="module" src="/scripts/script.js" defer></script>
+</Layout>

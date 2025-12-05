@@ -1,0 +1,219 @@
+---
+import FloatingText from '../components/FloatingText.astro';
+import Welcome from '../components/Welcome.astro';
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import alphabet from '../assets/icons/alphabet.png';
+import matryoshka from '../assets/icons/matryoshka.png';
+import library from '../assets/icons/library.png';
+import woman from '../assets/icons/woman.png';
+import neologisms from '../assets/icons/neologisms.png';
+import people from '../assets/icons/people.png';
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+  <!-- <Welcome /> -->
+  <section class="hero">
+    <FloatingText>
+      <h1 class="title">Ног ирон ӕвзаг</h1>
+      <p class="">ногдзырдтӕ ӕмӕ ног ӕлфӕвит ӕӕ</p>
+    </FloatingText>
+  </section>
+  <main class="icon-cloud">
+    <a class="alphabet" href="/alphabet"><Image src={alphabet} alt="Алфавит" /></a>
+    <a class="art" href="/art"><Image src={matryoshka} alt="Матрешка" /></a>
+    <a class="feedback" href="/feedback"><Image src={woman} alt="Женщина" /></a>
+    <a class="library" href="/library"><Image src={library} alt="Библиотека" /></a>
+    <a class="neologisms" href="/neologisms"><Image src={neologisms} alt="Неологизмы" /></a>
+    <a class="team" href="/team"><Image src={people} alt="Команда" /></a>
+  </main>
+</Layout>
+
+<!-- GLOBAL -->
+<style is:global>
+  :root {
+    --blood-red: #8b0000;
+    --deep-blue: #003366;
+
+    --black: #000000;
+    --white: #ffffff;
+    --paper: #f5f5dc;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Arial', monospace;
+    overflow-x: hidden;
+    background-image: radial-gradient(circle at 10% 20%, var(--blood-red) 0%, transparent 20%);
+  }
+
+  @font-face {
+    font-family: 'Neolost';
+    src: url('../NeolostPersonalUse-4nBPB.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .neolost {
+    font-family: 'Neolost', sans-serif;
+  }
+</style>
+
+<style>
+  main.icon-cloud {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .icon-cloud > a {
+    position: absolute;
+    width: 20%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    text-decoration: none;
+    animation-iteration-count: infinite;
+  }
+
+  .icon-cloud > a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* плавающие анимации для каждой ссылки */
+  .alphabet {
+    top: 10%;
+    left: 5%;
+    animation: float1 15s linear infinite;
+  }
+  .art {
+    top: 20%;
+    left: 50%;
+    animation: float2 18s linear infinite;
+  }
+  .feedback {
+    top: 50%;
+    left: 20%;
+    animation: float3 16s linear infinite;
+  }
+  .library {
+    top: 70%;
+    left: 60%;
+    animation: float4 20s linear infinite;
+  }
+  .neologisms {
+    top: 40%;
+    left: 80%;
+    animation: float5 17s linear infinite;
+  }
+  .team {
+    top: 60%;
+    left: 35%;
+    animation: float6 19s linear infinite;
+  }
+
+  @keyframes float1 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(30px, 50px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes float2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-40px, 30px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes float3 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(25px, -35px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes float4 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-30px, -40px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes float5 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(35px, 25px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes float6 {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-25px, 40px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .icon-cloud > a {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    cursor: help;
+  }
+
+  .title {
+    font-size: 8vw;
+    text-transform: uppercase;
+    filter: blur(2px);
+    text-shadow: 0 0 30px currentColor;
+    animation: glitch 2s infinite;
+    font-family: 'Neolost', sans-serif;
+    cursor: help;
+  }
+</style>

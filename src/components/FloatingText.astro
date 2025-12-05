@@ -1,0 +1,86 @@
+---
+import { throttle } from '../helpers/throttle';
+---
+
+<div class="floating-text-container">
+  <slot />
+</div>
+
+<style>
+  .floating-text {
+    display: inline-block;
+    position: relative;
+    transition: transform 0.12s ease-out;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  import { throttle } from '../helpers/throttle';
+
+  if (window.matchMedia('(pointer: fine)').matches === false) {
+    console.log('Floating text disabled on mobile');
+  } else {
+    const blocks = Array.from(document.querySelectorAll('.floating-text-container'));
+    const winWidth = () => window.innerWidth;
+    const blurMax = 6;
+    const strength = 0.25;
+    const lerpFactor = 0.2; // скорость плавного движения
+
+    // состояние каждого блока
+    const state = blocks.map((el) => ({
+      el,
+      current: 0, // текущий offset
+      target: 0, // целевой offset
+    }));
+
+    // обновление цели на каждый mousemove
+    const updateTarget = throttle((e) => {
+      const cursorX = e.clientX;
+      state.forEach((s) => {
+        const rect = s.el.getBoundingClientRect();
+        const blockCenter = rect.left + rect.width / 2;
+
+        let offset = -(cursorX - blockCenter) * strength;
+
+        // ограничение движения по окну
+        const maxLeft = -rect.left;
+        const maxRight = winWidth() - (rect.left + rect.width);
+        if (offset < maxLeft) offset = maxLeft;
+        if (offset > maxRight) offset = maxRight;
+
+        s.target = offset;
+      });
+
+      requestAnimationFrame(animate);
+    }, 50); // throttle сохраняется
+
+    // анимация с lerp
+    function animate() {
+      let needNextFrame = false;
+      state.forEach((s) => {
+        const delta = s.target - s.current;
+        if (Math.abs(delta) > 0.1) {
+          s.current += delta * lerpFactor;
+          const blurLevel = Math.min(Math.abs(s.current) / 15, blurMax);
+          s.el.style.transform = `translateX(${s.current}px)`;
+          s.el.style.filter = `blur(${blurLevel}px)`;
+          needNextFrame = true;
+        }
+      });
+      if (needNextFrame) requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('mousemove', updateTarget);
+
+    // сброс при ресайзе
+    window.addEventListener('resize', () => {
+      state.forEach((s) => {
+        s.current = 0;
+        s.target = 0;
+        s.el.style.transform = 'translateX(0px)';
+        s.el.style.filter = 'blur(0px)';
+      });
+    });
+  }
+</script>

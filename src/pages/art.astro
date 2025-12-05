@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="os">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Айвад — Ног ирон ӕвзаг</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <style>
+        /* small page layout helpers */
+        .page {
+            padding: 88px 20px 64px;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            margin: 6px 0 18px;
+            font-size: 1.6rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* placeholder cloud wrapper bounds */
+        .alphabet-cloud {
+            margin-top: 14px;
+        }
+
+        /* grid fallback — script may populate .alphabet-grid */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+            gap: 12px;
+            align-items: center;
+        }
+
+        .alphabet-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 46px;
+            border-radius: 10px;
+            background: var(--paper, #fff);
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 160ms ease, box-shadow 160ms ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .alphabet-letter:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+
+<body>
+    <header role="banner">
+        <a class="home" href="/" aria-label="Home — Ног ирон ӕвзаг">Ног ирон ӕвзаг</a>
+    </header>
+
+    <main class="page" role="main">
+        <h1 class="page-title">Айвад</h1>
+
+        <section class="section-cloud" id="art">
+            <h2>Айвад</h2>
+            <div class="art-grid">
+                <div class="art-category" data-category="music">Музыкæ</div>
+                <div class="art-category" data-category="poetry">Поэзи</div>
+                <div class="art-category" data-category="prose">Прозæ</div>
+                <div class="art-category" data-category="science">Зонад</div>
+                <div class="art-category" data-category="visual">Нывæгъдау</div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/scripts/script.js" defer></script>
+</body>
+
+</html>

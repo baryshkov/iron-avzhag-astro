@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Неологизмы — Железный авзаг</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+</head>
+<body class="page">
+    <header role="banner">
+        <a class="home" href="/" aria-label="Home — Ног ирон ӕвзаг">Ног ирон ӕвзаг</a>
+    </header>
+
+        <h1 class="page-title">Неологизмы</h1>
+
+    <main class="container">
+        <!-- Облако фразеологизмов / неологизмов — initNeologisms ожидает #neologisms-container -->
+        <section class="section-cloud" aria-labelledby="neologisms-heading">
+            <h2 id="neologisms-heading" class="section-title">Облако предложенных неологизмов</h2>
+            <div id="neologisms-container" class="cloud-grid" aria-live="polite">
+                <!-- скрипт /scripts/script.js заполнит содержимое -->
+            </div>
+            <p class="section-note">Если у вас есть предложение — отправьте форму на странице «Обратная связь».</p>
+        </section>
+    </main>
+
+    <footer class="site-footer container">
+        <small>© проект по сохранению осетинского языка — материалы на странице предназначены для обсуждения и документирования.</small>
+    </footer>
+
+    <script type="module" src="/scripts/script.js"></script>
+    <script>
+        // При загрузке страницы инициализируем облако неологизмов, если функция присутствует.
+        if (typeof initNeologisms === 'function') {
+            document.addEventListener('DOMContentLoaded', initNeologisms);
+        }
+    </script>
+</body>
+</html>
