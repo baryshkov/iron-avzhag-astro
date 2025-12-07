@@ -1,0 +1,201 @@
+---
+interface Props {
+  text: [string, string]; // [russian, ossetian]
+  color?: string; // optional color, defaults to blood-red
+}
+
+const { text, color = 'var(--blood-red, #8b0000)' } = Astro.props;
+---
+
+<div class="tooltip-wrapper" data-tooltip-color={color}>
+  <slot />
+  <div class="tooltip" data-tooltip-russian={text[0]} data-tooltip-ossetian={text[1]}>
+    <div class="tooltip-content">
+      <p class="tooltip-text tooltip-russian"></p>
+      <p class="tooltip-text tooltip-ossetian"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tooltip-wrapper {
+    /* Does not affect layout - all styling is on the tooltip itself */
+  }
+
+  .tooltip {
+    position: fixed;
+    background-color: black;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateZ(0); /* GPU acceleration */
+    will-change: opacity, transform;
+    font-family: 'Fixedsys', monospace;
+  }
+
+  .tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    animation: fadeOut 0.3s ease-out forwards;
+    animation-play-state: paused;
+  }
+
+  .tooltip.show.typing {
+    animation-play-state: paused;
+  }
+
+  .tooltip.show.fading {
+    animation-play-state: running;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tooltip-text {
+    margin: 0;
+    min-height: 1.2em;
+    word-break: break-word;
+  }
+
+  .tooltip-russian {
+    transform: rotateY('15deg');
+  }
+
+  .tooltip-ossetian {
+  }
+</style>
+
+<script>
+  interface TooltipInstance {
+    wrapper: Element;
+    tooltip: HTMLElement | null;
+    russianEl: HTMLElement | null;
+    ossetianEl: HTMLElement | null;
+    currentTimeout: NodeJS.Timeout | null;
+    isAnimating: boolean;
+  }
+
+  const typeText = (element: HTMLElement, text: string, speed: number = 50): Promise<void> => {
+    return new Promise((resolve) => {
+      element.textContent = '';
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index < text.length) {
+          element.textContent += text[index];
+          index++;
+        } else {
+          clearInterval(interval);
+          resolve();
+        }
+      }, speed);
+    });
+  };
+
+  const fadeOutText = (element: HTMLElement): Promise<void> => {
+    return new Promise((resolve) => {
+      let currentText = element.textContent || '';
+      let index = currentText.length - 1;
+      const interval = setInterval(() => {
+        if (index >= 0) {
+          element.textContent = currentText.substring(0, index);
+          index--;
+        } else {
+          clearInterval(interval);
+          element.textContent = '';
+          resolve();
+        }
+      }, 20);
+    });
+  };
+
+  document.querySelectorAll('.tooltip-wrapper').forEach((wrapper) => {
+    const instance: TooltipInstance = {
+      wrapper,
+      tooltip: wrapper.querySelector('.tooltip') as HTMLElement | null,
+      russianEl: wrapper.querySelector('.tooltip-russian') as HTMLElement | null,
+      ossetianEl: wrapper.querySelector('.tooltip-ossetian') as HTMLElement | null,
+      currentTimeout: null,
+      isAnimating: false,
+    };
+
+    wrapper.addEventListener('mouseenter', async () => {
+      if (!instance.tooltip || instance.isAnimating) return;
+
+      // Clear any pending fade-out
+      if (instance.currentTimeout) {
+        clearTimeout(instance.currentTimeout);
+        instance.currentTimeout = null;
+      }
+
+      instance.isAnimating = true;
+      instance.tooltip.classList.remove('fading');
+      instance.tooltip.classList.add('show', 'typing');
+
+      const russian = instance.tooltip.dataset.tooltipRussian || '';
+      const ossetian = instance.tooltip.dataset.tooltipOssetian || '';
+
+      // Get color from data attribute
+      const customColor = wrapper.getAttribute('data-tooltip-color');
+      if (customColor && instance.tooltip) {
+        instance.tooltip.style.backgroundColor = customColor;
+      }
+
+      // Position tooltip at mouse start
+      const tooltip = instance.tooltip;
+      tooltip.style.left = '0px';
+      tooltip.style.top = '0px';
+
+      // Type both texts in parallel
+      await Promise.all([
+        instance.russianEl ? typeText(instance.russianEl, russian, 40) : Promise.resolve(),
+        instance.ossetianEl ? typeText(instance.ossetianEl, ossetian, 40) : Promise.resolve(),
+      ]);
+
+      instance.isAnimating = false;
+      instance.tooltip.classList.remove('typing');
+    });
+
+    wrapper.addEventListener('mouseleave', async () => {
+      if (!instance.tooltip) return;
+
+      instance.tooltip.classList.remove('typing');
+      instance.tooltip.classList.add('fading');
+
+      // Fade out text
+      await Promise.all([
+        instance.russianEl ? fadeOutText(instance.russianEl) : Promise.resolve(),
+        instance.ossetianEl ? fadeOutText(instance.ossetianEl) : Promise.resolve(),
+      ]);
+
+      instance.tooltip.classList.remove('show', 'fading');
+    });
+
+    wrapper.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!instance.tooltip || !instance.tooltip.classList.contains('show')) return;
+
+      const offsetX = 10;
+      const offsetY = -40;
+      instance.tooltip.style.left = e.clientX + offsetX + 'px';
+      instance.tooltip.style.top = e.clientY + offsetY + 'px';
+    });
+  });
+</script>
